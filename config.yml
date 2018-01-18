@@ -6,6 +6,7 @@
 Configuration:
   # DO NOT edit the version number
   Version: 1
+  Debug: false
   Update_Notification: true
   Patches:
     NaN_Patch: true

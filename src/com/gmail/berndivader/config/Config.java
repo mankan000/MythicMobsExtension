@@ -10,6 +10,7 @@ import java.io.IOException;
 
 public class Config {
 
+	public static ConfigurationSection Debug;
 	public static ConfigurationSection UN;
 	public static ConfigurationSection NaN;
 	public static ConfigurationSection M_Players;
@@ -43,14 +44,15 @@ public class Config {
 			return;
 		}
 
+		Debug = config.getConfigurationSection("Configuration.Debug");
 		UN = config.getConfigurationSection("Configuration.UpdateNotification");
-        	NaN = config.getConfigurationSection("Configuration.Patches.NaN_Patch");
-        	M_Players = config.getConfigurationSection("Configuration.Modules.Mythic_Players");
-        	M_Thiefs = config.getConfigurationSection("Configuration.Modules.Mythic_Thiefs");
-        	CO = config.getConfigurationSection("Configuration.Modules.Cached_Owners");
-        	M_Parrot = config.getConfigurationSection("Configuration.Entities.Mythic_Parrot");
-        	WG = config.getConfigurationSection("Configuration.Compatibility.Worldguard");
-        	HD = config.getConfigurationSection("Configuration.Compatibility.Holographic_Displays");
+		NaN = config.getConfigurationSection("Configuration.Patches.NaN_Patch");
+		M_Players = config.getConfigurationSection("Configuration.Modules.Mythic_Players");
+		M_Thiefs = config.getConfigurationSection("Configuration.Modules.Mythic_Thiefs");
+		CO = config.getConfigurationSection("Configuration.Modules.Cached_Owners");
+		M_Parrot = config.getConfigurationSection("Configuration.Entities.Mythic_Parrot");
+		WG = config.getConfigurationSection("Configuration.Compatibility.Worldguard");
+		HD = config.getConfigurationSection("Configuration.Compatibility.Holographic_Displays");
 	}
 
 }
