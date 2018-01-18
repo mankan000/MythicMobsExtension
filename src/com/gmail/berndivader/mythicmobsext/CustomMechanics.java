@@ -187,16 +187,16 @@ public class CustomMechanics implements Listener {
 				skill = new MythicProjectile(e.getContainer().getConfigLine(), e.getConfig());
 				e.register(skill);
 				break;
+			} case "nodamageticks": {
+				skill=new NoDamageTicksMechanic(e.getContainer().getConfigLine(),e.getConfig());
+				e.register(skill);
+				break;
 			} case "oxygen": {
 				skill = new OxygenMechanic(e.getContainer().getConfigLine(), e.getConfig());
 				e.register(skill);
 				break;
 			} case "parseddisguise": {
 				skill=new ParsedDisguiseMechanic(e.getContainer().getConfigLine(),e.getConfig());
-				e.register(skill);
-				break;
-			} case "nodamageticks": {
-				skill=new NoDamageTicksMechanic(e.getContainer().getConfigLine(),e.getConfig());
 				e.register(skill);
 				break;
 			} case "parsedstance":
