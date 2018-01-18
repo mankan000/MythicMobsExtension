@@ -16,7 +16,8 @@ SkillMechanic
 implements
 ITargetedEntitySkill {
 	public static String str;
-	int j1,j2;
+	int j1;
+	int j2;
 	
 	static {
 		str="mmenodelaydmg";
@@ -24,8 +25,8 @@ ITargetedEntitySkill {
 
 	public NoDamageTicksMechanic(String skill, MythicLineConfig mlc) {
 		super(skill, mlc);
-		j1=mlc.getInteger("damagedelay",1);
-		j2=mlc.getInteger("duration",1);
+		j1=mlc.getInteger(new String[] { "damagedelay", "dd", "nodamageticks", "ndt" }, 1);
+		j2=mlc.getInteger(new String[] { "duration", "dur" }, 1);
 	}
 
 	@Override
