@@ -1,24 +1,26 @@
 package com.gmail.berndivader.config;
 
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
+import java.util.Arrays;
 
 public class Config {
 
-	public static ConfigurationSection Debug;
-	public static ConfigurationSection UN;
-	public static ConfigurationSection NaN;
-	public static ConfigurationSection M_Players;
-	public static ConfigurationSection M_Thiefs;
-	public static ConfigurationSection M_Parrot;
-	public static ConfigurationSection CO;
-	public static ConfigurationSection WG;
-	public static ConfigurationSection HD;
+    public static int version;
+	public static boolean debug;
+	public static boolean update;
+	public static boolean nan;
+	public static boolean m_players;
+	public static boolean m_thiefs;
+	public static boolean m_parrot;
+	public static boolean c_owners;
+	public static boolean wguard;
+	public static boolean h_displays;
 
 	public static void load(Plugin plugin) {
 		File configFile = new File(plugin.getDataFolder(), "config.yml");
@@ -44,15 +46,45 @@ public class Config {
 			return;
 		}
 
-		Debug = config.getConfigurationSection("Configuration.Debug");
-		UN = config.getConfigurationSection("Configuration.UpdateNotification");
-		NaN = config.getConfigurationSection("Configuration.Patches.NaN_Patch");
-		M_Players = config.getConfigurationSection("Configuration.Modules.Mythic_Players");
-		M_Thiefs = config.getConfigurationSection("Configuration.Modules.Mythic_Thiefs");
-		CO = config.getConfigurationSection("Configuration.Modules.Cached_Owners");
-		M_Parrot = config.getConfigurationSection("Configuration.Entities.Mythic_Parrot");
-		WG = config.getConfigurationSection("Configuration.Compatibility.Worldguard");
-		HD = config.getConfigurationSection("Configuration.Compatibility.Holographic_Displays");
+        // updates
+		version = config.getInt(ConfigValue.VERSION.getPath());
+
+		if (version <= 1) {
+		    for (ConfigValue value : ConfigValue.values()) {
+		        if (!config.isSet(value.getPath())) {
+		            config.set(value.getPath(), value.getDefaultValue());
+                }
+            }
+
+            // check for old entry's
+            List<String> entryToRemove = Arrays.asList(
+                    "Old_Entry1",
+                    "Old_Entry2"
+            );
+
+		    for (String oldEntry : entryToRemove) {
+		        if (config.isSet(oldEntry)) {
+		            config.set(oldEntry, null);
+                }
+            }
+
+            try {
+		        config.save(configFile);
+            } catch (IOException e) {
+		        e.printStackTrace();
+		        plugin.getLogger().warning("I/O error while saving the configuration. Was the file in use?");
+            }
+        }
+
+		debug = config.getBoolean(ConfigValue.DEBUG.getPath());
+		update = config.getBoolean(ConfigValue.UPDATE.getPath());
+		nan = config.getBoolean(ConfigValue.NAN_PATCH.getPath());
+		m_players = config.getBoolean(ConfigValue.M_PLAYERS.getPath());
+		m_thiefs = config.getBoolean(ConfigValue.M_THIEFS.getPath());
+		c_owners = config.getBoolean(ConfigValue.C_OWNERS.getPath());
+		m_parrot = config.getBoolean(ConfigValue.M_PARROT.getPath());
+		wguard = config.getBoolean(ConfigValue.WGUARD.getPath());
+		h_displays = config.getBoolean(ConfigValue.H_DISPLAYS.getPath());
 	}
 
 }
