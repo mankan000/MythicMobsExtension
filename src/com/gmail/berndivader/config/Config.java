@@ -11,7 +11,7 @@ import java.util.Arrays;
 
 public class Config {
 
-    public static int version;
+	public static int version;
 	public static boolean debug;
 	public static boolean update;
 	public static boolean nan;
@@ -46,35 +46,35 @@ public class Config {
 			return;
 		}
 
-        // updates
+		// updates
 		version = config.getInt(ConfigValue.VERSION.getPath());
 
 		if (version <= 1) {
-		    for (ConfigValue value : ConfigValue.values()) {
-		        if (!config.isSet(value.getPath())) {
-		            config.set(value.getPath(), value.getDefaultValue());
-                }
-            }
+			for (ConfigValue value : ConfigValue.values()) {
+				if (!config.isSet(value.getPath())) {
+					config.set(value.getPath(), value.getDefaultValue());
+				}
+			}
 
-            // check for old entry's
-            List<String> entryToRemove = Arrays.asList(
-                    "Old_Entry1",
-                    "Old_Entry2"
-            );
+			// check for old entry's
+			List<String> entryToRemove = Arrays.asList(
+					"Old_Entry1",
+					"Old_Entry2"
+			);
 
-		    for (String oldEntry : entryToRemove) {
-		        if (config.isSet(oldEntry)) {
-		            config.set(oldEntry, null);
-                }
-            }
+			for (String oldEntry : entryToRemove) {
+				if (config.isSet(oldEntry)) {
+					config.set(oldEntry, null);
+				}
+			}
 
-            try {
-		        config.save(configFile);
-            } catch (IOException e) {
-		        e.printStackTrace();
-		        plugin.getLogger().warning("I/O error while saving the configuration. Was the file in use?");
-            }
-        }
+			try {
+				config.save(configFile);
+			} catch (IOException e) {
+				e.printStackTrace();
+				plugin.getLogger().warning("I/O error while saving the configuration. Was the file in use?");
+			}
+		}
 
 		debug = config.getBoolean(ConfigValue.DEBUG.getPath());
 		update = config.getBoolean(ConfigValue.UPDATE.getPath());
