@@ -11,7 +11,7 @@ import java.util.Arrays;
 
 public class Config {
 
-    public static boolean debug;
+	public static boolean debug;
 	public static boolean update;
 	public static boolean nan;
 	public static boolean m_players;
@@ -49,7 +49,7 @@ public class Config {
 		}
 
 		// updates
-        int version = config.getInt(ConfigValue.VERSION.getPath());
+		int version = config.getInt(ConfigValue.VERSION.getPath());
 
 		if (version <= 1) {
 			for (ConfigValue value : ConfigValue.values()) {
