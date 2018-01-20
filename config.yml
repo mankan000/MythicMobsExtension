@@ -18,4 +18,7 @@ Configuration:
     Mythic_Parrot: true
   Compatibility:
     Worldguard: true
+    Factions: true
+    RPGItems: true
+    MobArena: true
     Holographic_Displays: true

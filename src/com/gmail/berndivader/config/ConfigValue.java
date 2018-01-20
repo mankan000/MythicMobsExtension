@@ -11,12 +11,15 @@ public enum ConfigValue {
 	C_OWNERS("Configuration.Modules.Cached_Owners", true),
 	M_PARROT("Configuration.Entities.Mythic_Parrot", true),
 	WGUARD("Configuration.Compatibility.Worldguard", true),
+	FACTIONS("Configuration.Compatibility.Factions", true),
+	RPGITEMS("Configuration.Compatibility.RPGItems", true),
+	MOBARENA("Configuration.Compatibility.MobArena", true),
 	H_DISPLAYS("Configuration.Compatibility.Holographic_Displays", true);
 
 	private final String path;
 	private final Object value;
 
-	private ConfigValue(String path, Object defaultValue) {
+	ConfigValue(String path, Object defaultValue) {
 		this.path = path;
 		value = defaultValue;
 	}

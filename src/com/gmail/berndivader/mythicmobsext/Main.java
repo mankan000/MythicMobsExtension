@@ -6,7 +6,10 @@ import java.util.Random;
 import java.util.logging.Logger;
 
 
+import com.gmail.berndivader.config.Config;
+import com.gmail.filoghost.holographicdisplays.util.VersionUtils;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Entity;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -55,6 +58,13 @@ public class Main extends JavaPlugin {
 	public static boolean disguisepresent;
 
 	public void onEnable() {
+
+		if (plugin != null  || System.getProperty("MythicMobsExtensionLoaded") != null) {
+			Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "[MythicMobsExtension] Please do not use /reload or plugin reloaders. You will not recieve support for doing this operation.");
+		}
+
+		System.setProperty("MythicMobsExtensionLoaded", "true");
+
 		plugin = this;
 		random = new Random();
 		pluginmanager = plugin.getServer().getPluginManager();
@@ -72,51 +82,96 @@ public class Main extends JavaPlugin {
 			}
 		}
  */
+
+		//need to figure out which way to check for updates, guess reading the bukkitpage for the version number might be the best way
+		//if (Config.update) {
+		//}
+
+		String version = VersionUtils.getBukkitVersion();
+
+		if ("v1_10_R1".equals(version)) {
+			return;
+
+		} else if ("v1_11_R1".equals(version)) {
+			return;
+
+		} else if ("v1_12_R1".equals(version)) {
+			return;
+
+		} else {
+			logger.warning("******************************************************");
+			logger.warning("     This version of MythicMobsExtension is only");
+			logger.warning("     supported on server versions 1.10 to 1.12.");
+			logger.warning("     We cant garantie that it runs properly.");
+			logger.warning("******************************************************");
+		}
+
+		Config.load(this);
+
 		this.volatilehandler = this.getVolatileHandler();
 		if (pluginmanager.isPluginEnabled("MythicMobs")) {
+			logger.info("Found MythicMobs...");
 			Main.mythicmobs = MythicMobs.inst();
 			Main.mobmanager = Main.mythicmobs.getMobManager();
 			pluginmanager.registerEvents(new UndoBlockListener(), this);
-			this.thiefhandler = new ThiefHandler();
-			logger.info("registered ThiefHandlers!");
+
 			new Utils(this);
 			new CustomMechanics(this);
-			logger.info("Found MythicMobs, registered CustomSkills.");
-			Main.mythicplayers = new MythicPlayers(this);
-			logger.info("registered MythicPlayers!");
-			new NaNpatch(this);
-			logger.info("NaN patch applied!");
-			new OwnConditions();
-			if (pluginmanager.isPluginEnabled("WorldGuard")) {
+			logger.info("registered CustomSkills!");
+			new OwnConditions(); //this?
+			logger.info("registered CustomConditions!");
+
+			if (Config.nan) {
+				new NaNpatch(this);
+				logger.info("NaN patch applied!");
+			}
+
+			if (Config.m_players) {
+				Main.mythicplayers = new MythicPlayers(this);
+				logger.info("registered MythicPlayers!");
+			}
+
+			if (Config.m_thiefs) {
+				this.thiefhandler = new ThiefHandler();
+				logger.info("registered ThiefHandlers!");
+			}
+
+			if (Config.m_parrot) {
+				return;
+			}
+
+			if (pluginmanager.isPluginEnabled("LibsDisguise") && Config.c_owners) {
+				cachedOwnerHandler = new CachedOwnerHandler(plugin);
+				logger.info("CachedOwner support enabled!");
+			}
+
+			if (pluginmanager.isPluginEnabled("WorldGuard") && Config.wguard) {
 				wg = getWorldGuard();
 				wgf = new WorldGuardFlags();
 				new WorldGuardFlag();
 				logger.info("Worldguard support enabled!");
 			}
-			if (pluginmanager.isPluginEnabled("Factions")
-					&& pluginmanager.isPluginEnabled("MassiveCore")) {
+			if (pluginmanager.isPluginEnabled("Factions") && pluginmanager.isPluginEnabled("MassiveCore") && Config.factions) {
 				fflags = new FactionsFlags();
 				new FactionsFlagConditions();
 				logger.info("Faction support enabled!");
 			}
-			if (pluginmanager.getPlugin("RPGItems") != null) {
-				logger.info("RPGItems support enabled!");
+			if (pluginmanager.getPlugin("RPGItems") != null && Config.rpgitems) {
 				hasRpgItems = true;
+				logger.info("RPGItems support enabled!");
 			}
-			if (pluginmanager.isPluginEnabled("MobArena")) {
+			if (pluginmanager.isPluginEnabled("MobArena") && Config.mobarena) {
 				maHandler = new MobArenaHandler();
 				new MobArenaConditions();
 				logger.info("MobArena support enabled!");
 			}
-			if (pluginmanager.isPluginEnabled("HolographicDisplays")) {
+			if (pluginmanager.isPluginEnabled("HolographicDisplays") && Config.h_displays) {
 				Main.healthbarhandler = new HealthbarHandler(this);
 				logger.info("HolographicDisplays support enabled!");
 			}
-			Main.disguisepresent=pluginmanager.isPluginEnabled("LibsDisguise")?true:false;
-			cachedOwnerHandler = new CachedOwnerHandler(plugin);
-			logger.info("CachedOwner support enabled!");
+
 			
-	        new BukkitRunnable() {
+			new BukkitRunnable() {
 				@Override
 				public void run() {
 					Main.mythicmobs.getRandomSpawningManager().reload();
@@ -141,9 +196,8 @@ public class Main extends JavaPlugin {
 
 	@Override
 	public void onDisable() {
-		for(Iterator<Entity>a=entityCache.iterator();a.hasNext();) {
-			Entity e=a.next();
-			if (e!=null) e.remove();
+		for (Entity e : entityCache) {
+			if (e != null) e.remove();
 		}
 		if (healthbarhandler!=null) {
 			Main.healthbarhandler.removeHealthbars();
@@ -191,24 +245,24 @@ public class Main extends JavaPlugin {
 		return this.maHandler;
 	}
 
-    public VolatileHandler getVolatileHandler() {
-        if (this.volatilehandler != null) return this.volatilehandler;
+	public VolatileHandler getVolatileHandler() {
+		if (this.volatilehandler != null) return this.volatilehandler;
 		String v, n;
-    	VolatileHandler vh=null;
+		VolatileHandler vh=null;
 		n = Bukkit.getServer().getClass().getPackage().getName();
-        v = n.substring(n.lastIndexOf(46) + 1);
-        try {
-            Class<?> c = Class.forName("com.gmail.berndivader.volatilecode.Volatile_"+v);
-            if (VolatileHandler.class.isAssignableFrom(c)) {
-            	vh = (VolatileHandler)c.getConstructor(new Class[0]).newInstance(new Object[0]);
-            }
-        } catch (Exception ex) {
-        	if (ex instanceof ClassNotFoundException) {
-        		logger.warning("Server version not supported!");
-        	}
-        	ex.printStackTrace();
-        }
-        return vh;
-    }
+		v = n.substring(n.lastIndexOf(46) + 1);
+		try {
+			Class<?> c = Class.forName("com.gmail.berndivader.volatilecode.Volatile_"+v);
+			if (VolatileHandler.class.isAssignableFrom(c)) {
+				vh = (VolatileHandler)c.getConstructor(new Class[0]).newInstance(new Object[0]);
+			}
+		} catch (Exception ex) {
+			if (ex instanceof ClassNotFoundException) {
+				logger.warning("Server version not supported!");
+			}
+			ex.printStackTrace();
+		}
+		return vh;
+	}
 
 }

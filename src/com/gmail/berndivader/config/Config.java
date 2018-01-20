@@ -11,8 +11,7 @@ import java.util.Arrays;
 
 public class Config {
 
-	public static int version;
-	public static boolean debug;
+    public static boolean debug;
 	public static boolean update;
 	public static boolean nan;
 	public static boolean m_players;
@@ -20,6 +19,9 @@ public class Config {
 	public static boolean m_parrot;
 	public static boolean c_owners;
 	public static boolean wguard;
+	public static boolean factions;
+	public static boolean rpgitems;
+	public static boolean mobarena;
 	public static boolean h_displays;
 
 	public static void load(Plugin plugin) {
@@ -47,7 +49,7 @@ public class Config {
 		}
 
 		// updates
-		version = config.getInt(ConfigValue.VERSION.getPath());
+        int version = config.getInt(ConfigValue.VERSION.getPath());
 
 		if (version <= 1) {
 			for (ConfigValue value : ConfigValue.values()) {
@@ -84,6 +86,9 @@ public class Config {
 		c_owners = config.getBoolean(ConfigValue.C_OWNERS.getPath());
 		m_parrot = config.getBoolean(ConfigValue.M_PARROT.getPath());
 		wguard = config.getBoolean(ConfigValue.WGUARD.getPath());
+		factions = config.getBoolean(ConfigValue.FACTIONS.getPath());
+		rpgitems = config.getBoolean(ConfigValue.RPGITEMS.getPath());
+		mobarena = config.getBoolean(ConfigValue.MOBARENA.getPath());
 		h_displays = config.getBoolean(ConfigValue.H_DISPLAYS.getPath());
 	}
 
