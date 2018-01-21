@@ -36,14 +36,13 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.BlockIterator;
 import org.bukkit.util.Vector;
 
-import com.gmail.berndivader.MythicPlayers.PlayerManager;
-import com.gmail.berndivader.MythicPlayers.Mechanics.TriggeredSkillAP;
+import com.gmail.berndivader.mythicmobsext.mythicplayers.PlayerManager;
+import com.gmail.berndivader.mythicmobsext.mythicplayers.mechanics.TriggeredSkillAP;
 import com.gmail.berndivader.NMS.NMSUtils;
 import com.gmail.berndivader.mythicmobsext.Main;
-import com.gmail.berndivader.mythicmobsext.PlayerGoggleMechanic;
-import com.gmail.berndivader.mythicmobsext.PlayerSpinMechanic;
-import com.gmail.berndivader.mythicmobsext.StunMechanic;
-import com.gmail.berndivader.utils.Vec2D;
+import com.gmail.berndivader.mythicmobsext.mechanics.PlayerGoggleMechanic;
+import com.gmail.berndivader.mythicmobsext.mechanics.PlayerSpinMechanic;
+import com.gmail.berndivader.mythicmobsext.mechanics.StunMechanic;
 
 import io.lumine.xikage.mythicmobs.MythicMobs;
 import io.lumine.xikage.mythicmobs.adapters.AbstractEntity;

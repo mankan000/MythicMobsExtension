@@ -2,7 +2,7 @@ package com.gmail.berndivader.mythicmobsext.conditions.mobarena;
 
 import com.garbagemule.MobArena.MobArenaHandler;
 import com.gmail.berndivader.mythicmobsext.Main;
-import com.gmail.berndivader.mythicmobsext.conditions.AbstractCustomCondition;
+import com.gmail.berndivader.mythicmobsext.abstractcode.AbstractCustomCondition;
 
 import io.lumine.xikage.mythicmobs.adapters.AbstractLocation;
 import io.lumine.xikage.mythicmobs.adapters.bukkit.BukkitAdapter;

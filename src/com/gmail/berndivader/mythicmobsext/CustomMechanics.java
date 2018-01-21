@@ -1,5 +1,7 @@
 package com.gmail.berndivader.mythicmobsext;
 
+import com.gmail.berndivader.mythicmobsext.AStarMechanic;
+import com.gmail.berndivader.mythicmobsext.mechanics.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
@@ -24,7 +26,7 @@ public class CustomMechanics implements Listener {
 		switch (mech) {
 		case "advaipathfinder":
 		case "custompathfinder": {
-				skill = new AdvAIPathFinderSelector(e.getContainer().getConfigLine(),e.getConfig());
+				skill = new AdvAIPathFinderMechanic(e.getContainer().getConfigLine(),e.getConfig());
 				e.register(skill);
 				break;
 			} case "asequip": {
@@ -44,7 +46,7 @@ public class CustomMechanics implements Listener {
 				e.register(skill);
 				break;
 			} case "castif": {
-				skill = new CastIf(e.getContainer().getConfigLine(), e.getConfig());
+				skill = new CastIfMechanic(e.getContainer().getConfigLine(), e.getConfig());
 				e.register(skill);
 				break;
 			} case "clearthreattarget": {
@@ -133,10 +135,6 @@ public class CustomMechanics implements Listener {
 				break;
 			} case "entityprojectile": {
 				skill = new EntityProjectile(e.getContainer().getConfigLine(), e.getConfig());
-				e.register(skill);
-				break;
-			} case "equipskull": {
-				skill = new EquipFixMechanic(e.getContainer().getConfigLine(), e.getConfig());
 				e.register(skill);
 				break;
 			} case "extinguish": {

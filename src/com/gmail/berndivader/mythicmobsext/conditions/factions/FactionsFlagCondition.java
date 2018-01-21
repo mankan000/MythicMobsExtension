@@ -1,7 +1,7 @@
 package com.gmail.berndivader.mythicmobsext.conditions.factions;
 
 import com.gmail.berndivader.mythicmobsext.Main;
-import com.gmail.berndivader.mythicmobsext.conditions.AbstractCustomCondition;
+import com.gmail.berndivader.mythicmobsext.abstractcode.AbstractCustomCondition;
 
 import io.lumine.xikage.mythicmobs.adapters.AbstractLocation;
 import io.lumine.xikage.mythicmobs.adapters.bukkit.BukkitAdapter;

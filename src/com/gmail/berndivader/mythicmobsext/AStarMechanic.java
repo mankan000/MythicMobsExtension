@@ -23,7 +23,8 @@ public class AStarMechanic extends SkillMechanic
 implements
 ITargetedEntitySkill,
 ITargetedLocationSkill {
-	int range;
+
+	private int range;
 
 	public AStarMechanic(String skill, MythicLineConfig mlc) {
 		super(skill, mlc);
@@ -37,12 +38,12 @@ ITargetedLocationSkill {
 		AStar astar;
 		try {
 			astar = new AStar(start, end, this.range);
-	        List<Tile>route=astar.iterate();
-	        if (route==null) {
-	        	System.err.println("route=null");
-	        	return false;
-	        }
-	       	this.changePathBlocksToDiamond(start,route);
+			List<Tile>route=astar.iterate();
+			if (route==null) {
+				System.err.println("route=null");
+				return false;
+			}
+			this.changePathBlocksToDiamond(start,route);
 		} catch (InvalidPathException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -57,12 +58,11 @@ ITargetedLocationSkill {
 	
 	private void changePathBlocksToDiamond(Location start, List<Tile> tiles){
 		List<Player>players=start.getWorld().getPlayers();
-		Iterator<Tile>it1=tiles.iterator();
-		while(it1.hasNext()) {
-			Tile t=it1.next();
-			for (Player p:players) {
+		for (Tile t : tiles) {
+			for (Player p : players) {
+				// sendBlockChange is depricated Bukkit API
 				p.sendBlockChange(new Location(p.getWorld(), (start.getBlockX() + t.getX()), (start.getBlockY() + t.getY()), (start.getBlockZ() + t.getZ())),
-						Material.DIAMOND_BLOCK, (byte) 0);			
+						Material.DIAMOND_BLOCK, (byte) 0);
 			}
 		}
 	}	

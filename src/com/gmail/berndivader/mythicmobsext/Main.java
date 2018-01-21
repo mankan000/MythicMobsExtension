@@ -7,6 +7,7 @@ import java.util.logging.Logger;
 
 
 import com.gmail.berndivader.config.Config;
+import com.gmail.berndivader.mythicmobsext.mythicthiefs.ThiefHandler;
 import com.gmail.filoghost.holographicdisplays.util.VersionUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -16,14 +17,13 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import com.garbagemule.MobArena.MobArenaHandler;
-import com.gmail.berndivader.MythicPlayers.MythicPlayers;
+import com.gmail.berndivader.mythicmobsext.mythicplayers.MythicPlayers;
 import com.gmail.berndivader.NMS.NMSUtils;
-import com.gmail.berndivader.cachedowners.CachedOwnerHandler;
-import com.gmail.berndivader.healthbar.HealthbarHandler;
+import com.gmail.berndivader.mythicmobsext.cachedowners.CachedOwnerHandler;
+import com.gmail.berndivader.mythicmobsext.mechanics.healthbar.HealthbarHandler;
 import com.gmail.berndivader.mythicmobsext.conditions.factions.FactionsFlags;
 import com.gmail.berndivader.mythicmobsext.conditions.factions.FactionsFlagConditions;
 import com.gmail.berndivader.mythicmobsext.conditions.mobarena.MobArenaConditions;
-import com.gmail.berndivader.mythicmobsext.conditions.own.OwnConditions;
 import com.gmail.berndivader.mythicmobsext.conditions.worldguard.WorldGuardFlags;
 import com.gmail.berndivader.mythicmobsext.conditions.worldguard.WorldGuardFlag;
 import com.gmail.berndivader.nanpatch.NaNpatch;
@@ -118,7 +118,7 @@ public class Main extends JavaPlugin {
 			new Utils(this);
 			new CustomMechanics(this);
 			logger.info("registered CustomSkills!");
-			new OwnConditions(); //this?
+			new CustomConditions(); //this?
 			logger.info("registered CustomConditions!");
 
 			if (Config.nan) {
@@ -128,7 +128,7 @@ public class Main extends JavaPlugin {
 
 			if (Config.m_players) {
 				Main.mythicplayers = new MythicPlayers(this);
-				logger.info("registered MythicPlayers!");
+				logger.info("registered mythicplayers!");
 			}
 
 			if (Config.m_thiefs) {

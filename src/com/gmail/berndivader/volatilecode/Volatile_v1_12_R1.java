@@ -45,7 +45,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import com.gmail.berndivader.NMS.NMSUtil;
 import com.gmail.berndivader.mythicmobsext.Main;
-import com.gmail.berndivader.mythicmobsext.conditions.own.GetLastDamageIndicator;
+import com.gmail.berndivader.mythicmobsext.conditions.GetLastDamageIndicator;
 import com.gmail.berndivader.utils.Utils;
 
 import io.lumine.xikage.mythicmobs.mobs.ActiveMob;
