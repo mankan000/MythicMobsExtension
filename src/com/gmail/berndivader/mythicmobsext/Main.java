@@ -217,6 +217,7 @@ public class Main extends JavaPlugin {
 		Main.cachedOwnerHandler = null;
 		Main.wgf = null;
 		Main.fflags = null;
+		System.clearProperty("MythicMobsExtensionLoaded");
 		pluginmanager.disablePlugin(this);
 	}
 
