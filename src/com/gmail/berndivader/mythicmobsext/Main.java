@@ -5,10 +5,6 @@ import java.util.Iterator;
 import java.util.Random;
 import java.util.logging.Logger;
 
-
-import com.gmail.berndivader.config.Config;
-import com.gmail.berndivader.mythicmobsext.mythicthiefs.ThiefHandler;
-import com.gmail.filoghost.holographicdisplays.util.VersionUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Entity;
@@ -16,7 +12,8 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import com.garbagemule.MobArena.MobArenaHandler;
+import com.gmail.berndivader.config.Config;
+import com.gmail.berndivader.mythicmobsext.mythicthiefs.ThiefHandler;
 import com.gmail.berndivader.mythicmobsext.mythicplayers.MythicPlayers;
 import com.gmail.berndivader.NMS.NMSUtils;
 import com.gmail.berndivader.mythicmobsext.cachedowners.CachedOwnerHandler;
@@ -29,7 +26,9 @@ import com.gmail.berndivader.mythicmobsext.conditions.worldguard.WorldGuardFlag;
 import com.gmail.berndivader.nanpatch.NaNpatch;
 import com.gmail.berndivader.utils.Utils;
 import com.gmail.berndivader.volatilecode.VolatileHandler;
+import com.garbagemule.MobArena.MobArenaHandler;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
+import com.gmail.filoghost.holographicdisplays.util.VersionUtils;
 import io.lumine.xikage.mythicmobs.MythicMobs;
 import io.lumine.xikage.mythicmobs.mobs.MobManager;
 
@@ -117,7 +116,7 @@ public class Main extends JavaPlugin {
 
 			new Utils(this);
 			new CustomMechanics(this);
-			logger.info("registered CustomSkills!");
+			logger.info("registered CustomMechanics!");
 			new CustomConditions(); //this?
 			logger.info("registered CustomConditions!");
 
@@ -151,20 +150,24 @@ public class Main extends JavaPlugin {
 				new WorldGuardFlag();
 				logger.info("Worldguard support enabled!");
 			}
+
 			if (pluginmanager.isPluginEnabled("Factions") && pluginmanager.isPluginEnabled("MassiveCore") && Config.factions) {
 				fflags = new FactionsFlags();
 				new FactionsFlagConditions();
 				logger.info("Faction support enabled!");
 			}
+
 			if (pluginmanager.getPlugin("RPGItems") != null && Config.rpgitems) {
 				hasRpgItems = true;
 				logger.info("RPGItems support enabled!");
 			}
+
 			if (pluginmanager.isPluginEnabled("MobArena") && Config.mobarena) {
 				maHandler = new MobArenaHandler();
 				new MobArenaConditions();
 				logger.info("MobArena support enabled!");
 			}
+
 			if (pluginmanager.isPluginEnabled("HolographicDisplays") && Config.h_displays) {
 				Main.healthbarhandler = new HealthbarHandler(this);
 				logger.info("HolographicDisplays support enabled!");
