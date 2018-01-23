@@ -25,7 +25,7 @@ import com.gmail.berndivader.mythicmobsext.conditions.worldguard.WorldGuardFlags
 import com.gmail.berndivader.mythicmobsext.conditions.worldguard.WorldGuardFlag;
 import com.gmail.berndivader.nanpatch.NaNpatch;
 import com.gmail.berndivader.utils.Utils;
-import com.gmail.berndivader.volatilecode.VolatileHandler;
+import com.gmail.berndivader.volatilecode.Handler;
 import com.garbagemule.MobArena.MobArenaHandler;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import com.gmail.filoghost.holographicdisplays.util.VersionUtils;
@@ -52,7 +52,7 @@ public class Main extends JavaPlugin {
 	private static MobManager mobmanager;
 	private static MythicPlayers mythicplayers;
 	private MobArenaHandler maHandler;
-	private VolatileHandler volatilehandler;
+	private Handler volatilehandler;
 	public static HashSet<Entity>entityCache=new HashSet<Entity>();
 	public static boolean disguisepresent;
 
@@ -217,6 +217,7 @@ public class Main extends JavaPlugin {
 		Main.cachedOwnerHandler = null;
 		Main.wgf = null;
 		Main.fflags = null;
+		System.clearProperty("MythicMobsExtensionLoaded");
 		pluginmanager.disablePlugin(this);
 	}
 
@@ -248,16 +249,16 @@ public class Main extends JavaPlugin {
 		return this.maHandler;
 	}
 
-	public VolatileHandler getVolatileHandler() {
+	public Handler getVolatileHandler() {
 		if (this.volatilehandler != null) return this.volatilehandler;
 		String v, n;
-		VolatileHandler vh=null;
+		Handler vh=null;
 		n = Bukkit.getServer().getClass().getPackage().getName();
 		v = n.substring(n.lastIndexOf(46) + 1);
 		try {
 			Class<?> c = Class.forName("com.gmail.berndivader.volatilecode.Volatile_"+v);
-			if (VolatileHandler.class.isAssignableFrom(c)) {
-				vh = (VolatileHandler)c.getConstructor(new Class[0]).newInstance(new Object[0]);
+			if (Handler.class.isAssignableFrom(c)) {
+				vh = (Handler)c.getConstructor(new Class[0]).newInstance(new Object[0]);
 			}
 		} catch (Exception ex) {
 			if (ex instanceof ClassNotFoundException) {
@@ -267,5 +268,4 @@ public class Main extends JavaPlugin {
 		}
 		return vh;
 	}
-
 }

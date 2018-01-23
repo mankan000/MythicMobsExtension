@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.gmail.berndivader.mythicmobsext.Main;
+import com.gmail.berndivader.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -35,7 +36,7 @@ ITargetedEntitySkill,
 ITargetedLocationSkill {
 	private String itemtype;
 	private String dropname;
-	private int amount;
+	private String amount;
 	private boolean stackable;
 	private boolean shuffle;
 
@@ -44,11 +45,11 @@ ITargetedLocationSkill {
 		this.ASYNC_SAFE=false;
 		this.itemtype=mlc.getString(new String[] { "mythicitem", "item", "itemtype", "type", "t", "i" },null);
 		this.dropname=mlc.getString(new String[] { "dropname", "customname", "name", "n" },null);
-		this.amount=mlc.getInteger(new String[] { "amount", "a" }, 1);
+		this.amount=mlc.getString(new String[] { "amount", "a" }, "1").toLowerCase();
 		this.stackable=mlc.getBoolean(new String[] { "stackable", "sa" },true);
 		this.shuffle=mlc.getBoolean(new String[] { "shuffle", "s" },false);
 	}
-	
+
 	@Override
 	public boolean castAtLocation(SkillMetadata data, AbstractLocation ltarget) {
 		return a(data,null,ltarget);
@@ -58,23 +59,22 @@ ITargetedLocationSkill {
 	public boolean castAtEntity(SkillMetadata data, AbstractEntity etarget) {
 		return a(data,etarget,null);
 	}
-	
+
 	private boolean a(SkillMetadata data,AbstractEntity e1,AbstractLocation l1) {
 		ActiveMob am=(ActiveMob)data.getCaster();
 		if (this.itemtype==null||am==null) return false;
-		ArrayList<ItemStack>drops=createItemStack(this.itemtype,this.dropname,this.amount,this.stackable,this.shuffle,am,e1==null?data.getTrigger():e1);
+		ArrayList<ItemStack>drops=createItemStack(this.itemtype,this.dropname,Utils.randomRangeInt(amount),this.stackable,this.shuffle,am,e1==null?data.getTrigger():e1);
 		LivingEntity trigger=data.getTrigger()==null?null:(LivingEntity)data.getTrigger().getBukkitEntity();
 		MythicMobsExtItemDropEvent e=new MythicMobsExtItemDropEvent(am,trigger,drops);
-        Bukkit.getServer().getPluginManager().callEvent(e);
+		Bukkit.getServer().getPluginManager().callEvent(e);
 		if (e.isCancelled()) return false;
 		drops=e.getDrops();
 		dropItems(drops,e1!=null?e1.getBukkitEntity().getLocation():BukkitAdapter.adapt(l1));
 		return true;
 	}
 
-	private static ArrayList<ItemStack> createItemStack(String itemtype, String dropname, int amount, boolean stackable, boolean bl1,
-			ActiveMob dropper, AbstractEntity trigger) {
-		DropManager dropmanager= Main.getPlugin().getMythicMobs().getDropManager();
+	private static ArrayList<ItemStack> createItemStack(String itemtype, String dropname, int amount, boolean stackable, boolean bl1, ActiveMob dropper, AbstractEntity trigger) {
+		DropManager dropmanager=Main.getPlugin().getMythicMobs().getDropManager();
 		Optional<MythicDropTable>maybeDropTable=dropmanager.getDropTable(itemtype);
 		ArrayList<ItemStack>loot=new ArrayList<>();
 		MythicDropTable dt;

@@ -1,12 +1,11 @@
 package com.gmail.berndivader.mythicmobsext;
 
-import com.gmail.berndivader.mythicmobsext.AStarMechanic;
 import com.gmail.berndivader.mythicmobsext.mechanics.*;
+import com.gmail.berndivader.mythicmobsext.customprojectiles.*;
+
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
-
-import com.gmail.berndivader.mythicmobsext.customprojectiles.*;
 
 import io.lumine.xikage.mythicmobs.api.bukkit.events.MythicMechanicLoadEvent;
 import io.lumine.xikage.mythicmobs.skills.SkillMechanic;
@@ -43,6 +42,10 @@ public class CustomMechanics implements Listener {
 				break;
 			} case "blockprojectile": {
 				skill = new BlockProjectile(e.getContainer().getConfigLine(), e.getConfig());
+				e.register(skill);
+				break;
+			} case "bloodyscreen": {
+				skill = new BloodyScreenMechanic(e.getContainer().getConfigLine(), e.getConfig());
 				e.register(skill);
 				break;
 			} case "castif": {

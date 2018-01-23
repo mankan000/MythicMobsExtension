@@ -6,11 +6,13 @@ import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
+import io.lumine.xikage.mythicmobs.util.types.RangedDouble;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
@@ -43,6 +45,7 @@ import com.gmail.berndivader.mythicmobsext.Main;
 import com.gmail.berndivader.mythicmobsext.mechanics.PlayerGoggleMechanic;
 import com.gmail.berndivader.mythicmobsext.mechanics.PlayerSpinMechanic;
 import com.gmail.berndivader.mythicmobsext.mechanics.StunMechanic;
+import com.gmail.berndivader.utils.Vec2D;
 
 import io.lumine.xikage.mythicmobs.MythicMobs;
 import io.lumine.xikage.mythicmobs.adapters.AbstractEntity;
@@ -64,38 +67,40 @@ public class Utils implements Listener {
 	public static MythicMobs mythicmobs;
 	public static MobManager mobmanager;
 	public static int serverV;
-	
+	public static HashMap<UUID,Vec3D>pl;
+
 	static {
 		mythicmobs=Main.getPlugin().getMythicMobs();
 		mobmanager=Main.getPlugin().getMobManager();
-	    try {
-		    serverV=Integer.parseInt(Bukkit.getServer().getClass().getPackage().getName().substring(23).split("_")[1]);
-	    } catch (Exception e) {
-	    	serverV=11;
-	    }
+		pl=new HashMap<>();
+		try {
+			serverV=Integer.parseInt(Bukkit.getServer().getClass().getPackage().getName().substring(23).split("_")[1]);
+		} catch (Exception e) {
+			serverV=11;
+		}
 	}
-	
+
 	public Utils(Plugin plugin) {
 		if (Utils.serverV>11) {
 			plugin.getServer().getPluginManager().registerEvents(this, plugin);
 			Main.logger.info("Found Minecraft 1.12 or higher, patching EntityParrot.");
 		}
 	}
-	
+
 	@EventHandler
 	public void replaceParrotsEvent(MythicMobSpawnEvent e) {
 		if (e.isCancelled()) return;
 		if (e.getEntity() instanceof Parrot) {
 			MythicMob mm=e.getMobType();
 			LivingEntity p=Main.getPlugin().getVolatileHandler().spawnCustomParrot(e.getLocation(),mm.getConfig().getBoolean("Options.CookieDie",true));
-	        if (mm.getMythicEntity()!=null) p=(LivingEntity)mm.getMythicEntity().applyOptions(p);
-	        final ActiveMob am = new ActiveMob(p.getUniqueId(), BukkitAdapter.adapt(p),mm,e.getMobLevel());
-	        mythicmobs.getMobManager().registerActiveMob(am);
-	        mm.applyMobOptions(am,am.getLevel());
-	        mm.applyMobVolatileOptions(am);
-	        new TriggeredSkillAP(SkillTrigger.SPAWN,am,null);
-	        final Entity entity=e.getEntity();
-	        new BukkitRunnable() {
+			if (mm.getMythicEntity()!=null) p=(LivingEntity)mm.getMythicEntity().applyOptions(p);
+			final ActiveMob am = new ActiveMob(p.getUniqueId(), BukkitAdapter.adapt(p),mm,e.getMobLevel());
+			mythicmobs.getMobManager().registerActiveMob(am);
+			mm.applyMobOptions(am,am.getLevel());
+			mm.applyMobVolatileOptions(am);
+			new TriggeredSkillAP(SkillTrigger.SPAWN,am,null);
+			final Entity entity=e.getEntity();
+			new BukkitRunnable() {
 				@Override
 				public void run() {
 					ActiveMob am1=null;
@@ -135,14 +140,14 @@ public class Utils implements Listener {
 			}.runTaskLater(MythicMobs.inst(), 1L);
 		}
 	}
-	
+
 	@EventHandler
 	public void RemoveFallingBlockProjectile(EntityChangeBlockEvent e) {
 		if (e.getEntity().hasMetadata(Main.mpNameVar)) {
 			e.setCancelled(true);
 		}
 	}
-	
+
 	@EventHandler
 	public void mmTriggerOnKill(EntityDeathEvent e) {
 		EntityDamageEvent entityDamageEvent = e.getEntity().getLastDamageCause();
@@ -194,13 +199,13 @@ public class Utils implements Listener {
 		}
 		victim.setMetadata("LastDamageCause", new FixedMetadataValue(Main.getPlugin(), cause.toString()));
 	}
-	
+
 	@EventHandler
 	public void triggerDamageForNoneEntity(EntityDamageEvent e) {
 		TriggeredSkillAP ts;
 		final Entity victim = e.getEntity();
 		if (e instanceof EntityDamageByEntityEvent
-				|| !(victim instanceof LivingEntity) 
+				|| !(victim instanceof LivingEntity)
 				|| victim instanceof Player
 				|| mobmanager.getVoidList().contains(victim.getUniqueId())) return;
 		ActiveMob am = mobmanager.getMythicMobInstance(victim);
@@ -209,7 +214,7 @@ public class Utils implements Listener {
 		ts = new TriggeredSkillAP(SkillTrigger.DAMAGED, am, null);
 		if (ts.getCancelled()) e.setCancelled(true);
 	}
-	
+
 	@EventHandler
 	public void onPlayerQuit(PlayerQuitEvent e) {
 		Player p=e.getPlayer();
@@ -260,7 +265,7 @@ public class Utils implements Listener {
 	}
 
 	public static void doDamage(SkillCaster am, AbstractEntity t, double damage, boolean ignorearmor,
-			boolean preventKnockback, boolean preventImmunity, boolean ignoreabs, boolean debug, DamageCause cause) {
+								boolean preventKnockback, boolean preventImmunity, boolean ignoreabs, boolean debug, DamageCause cause) {
 		LivingEntity target;
 		am.setUsingDamageSkill(true);
 		if (am instanceof ActiveMob)
@@ -280,7 +285,7 @@ public class Utils implements Listener {
 			damage = 0.001D;
 		round(damage, 3);
 		target.setMetadata("DamageAmount", new FixedMetadataValue(Main.getPlugin(), damage));
-        target.damage(damage, source);
+		target.damage(damage, source);
 		if (preventImmunity)
 			target.setNoDamageTicks(0);
 		am.setUsingDamageSkill(false);
@@ -453,14 +458,14 @@ public class Utils implements Listener {
 		newy -= z * sinpitch;
 		return new Vector(newx, newy, newz);
 	}
-	
+
 	public static Vector getFrontBackOffsetVector(Vector v, double o) {
 		Vector d=v.clone();
 		d.normalize();
 		d.multiply(o);
 		return d;
 	}
-	
+
 	public static Vector getSideOffsetVector(float vYa, double hO, boolean iy) {
 		double y = 0d;
 		if (!iy)
@@ -615,15 +620,15 @@ public class Utils implements Listener {
 		return (a + Math.sqrt(Math.pow(a, 2) + b)) / g;
 	}
 
-    public static double distanceSquared(Vector f, Vector t) {
-        double dx = t.getBlockX() - f.getBlockX();
-        double dz = t.getBlockZ() - f.getBlockZ();
-        return dx * dx + dz * dz;
-    }
-    
-    public static boolean isNumeric(String s) {
-    	return s!=null?s.matches("[0-9]*"):false;
-    }
+	public static double distanceSquared(Vector f, Vector t) {
+		double dx = t.getBlockX() - f.getBlockX();
+		double dz = t.getBlockZ() - f.getBlockZ();
+		return dx * dx + dz * dz;
+	}
+
+	public static boolean isNumeric(String s) {
+		return s!=null?s.matches("[0-9]*"):false;
+	}
 
 	public static UUID isUUID(String data) {
 		UUID uuid = null;
@@ -676,7 +681,7 @@ public class Utils implements Listener {
 	public static long encodePosition(double d) {
 		return (long)(d*4096D);
 	}
-	
+
 	public static String[] wrapStr(String s, int l) {
 		String r="";
 		String d="&&br&&";
@@ -691,11 +696,11 @@ public class Utils implements Listener {
 		}
 		return r.split(d);
 	}
-	
-    public static float normalise(float v,float s,float e) {
-        float w=e-s,o=v-s;
-        return (float)((o-(Math.floor(o/w)*w))+s);
-    }
+
+	public static float normalise(float v,float s,float e) {
+		float w=e-s,o=v-s;
+		return (float)((o-(Math.floor(o/w)*w))+s);
+	}
 
 	public static void triggerShoot(Entity caster, Entity trigger) {
 		final ActiveMob am=mobmanager.getMythicMobInstance(caster);
@@ -703,7 +708,7 @@ public class Utils implements Listener {
 			new TriggeredSkillAP(SkillTrigger.SHOOT,am,am.getEntity().getTarget());
 		}
 	}
-	
+
 	public static String parseMobVariables(String s,SkillMetadata m,AbstractEntity c,AbstractEntity t,AbstractLocation l) {
 		AbstractLocation l1=l!=null?l:t!=null?t.getLocation():null;
 		s=SkillString.parseMobVariables(s,m.getCaster(),t,m.getTrigger());
@@ -721,7 +726,7 @@ public class Utils implements Listener {
 		if (s.contains(".meta.")) s=parseMetaVar(s,c,t,l);
 		return s;
 	}
-	
+
 	private static String parseMetaVar(String s,AbstractEntity a1,AbstractEntity a2,AbstractLocation a3) {
 		Entity e1=a1!=null?a1.getBukkitEntity():null;
 		Entity e2=a2!=null?a2.getBukkitEntity():null;
@@ -745,19 +750,44 @@ public class Utils implements Listener {
 		}
 		return s;
 	}
-	
+
 	public static float getBowTension(Player p) {
 		int i1=NMSUtils.getCurrentTick(Bukkit.getServer()),i2=-1;
-        if (((HumanEntity)p).isHandRaised()&&p.hasMetadata(PlayerManager.meta_BOWTICKSTART)) {
-        	i2=p.getMetadata(PlayerManager.meta_BOWTICKSTART).get(0).asInt();
-        }
-        if (i2==-1) return (float)i2;
-        int i3=i1-i2;
-        float f1=(float)i3/20.0f;
-        if((f1=(f1*f1+f1*2.0f)/3.0f)>1.0f) f1=1.0f;
-        return f1;
+		if (((HumanEntity)p).isHandRaised()&&p.hasMetadata(PlayerManager.meta_BOWTICKSTART)) {
+			i2=p.getMetadata(PlayerManager.meta_BOWTICKSTART).get(0).asInt();
+		}
+		if (i2==-1) return (float)i2;
+		int i3=i1-i2;
+		float f1=(float)i3/20.0f;
+		if((f1=(f1*f1+f1*2.0f)/3.0f)>1.0f) f1=1.0f;
+		return f1;
 	}
-	
+
+	public static boolean isHeadingTo(Vector offset,Vector velocity) {
+		double dbefore=offset.lengthSquared();
+		if (dbefore<0.0001) {
+			return true;
+		}
+		Vector clonedVelocity=velocity.clone();
+		setVecLenSqrt(clonedVelocity,dbefore);
+		return dbefore>clonedVelocity.subtract(offset).lengthSquared();
+	}
+
+	public static void setVecLen(Vector vector,double length) {
+		setVecLenSqrt(vector,Math.signum(length)*length*length);
+	}
+
+	public static void setVecLenSqrt(Vector vector, double lengthsquared) {
+		double vlength=vector.lengthSquared();
+		if (Math.abs(vlength)>0.0001) {
+			if (lengthsquared<0) {
+				vector.multiply(-Math.sqrt(-lengthsquared/vlength));
+			} else {
+				vector.multiply(Math.sqrt(lengthsquared/vlength));
+			}
+		}
+	}
+
 	public static int[] shuffleArray(int[]arr1) {
 		int i1;
 		Random r=Main.random;
@@ -771,35 +801,65 @@ public class Utils implements Listener {
 		}
 		return arr1;
 	}
-	
+
 	public static Object cloneObject(Object obj) {
 		try {
-            Object clone=obj.getClass().newInstance();
-            for (Field field:obj.getClass().getDeclaredFields()) {
-            	field.setAccessible(true);
-            	if(field.get(obj)==null||Modifier.isFinal(field.getModifiers())) continue;
-            	if(field.getType().isPrimitive()
-            			||field.getType().equals(String.class)
-            			||field.getType().getSuperclass().equals(Number.class)
-                        ||field.getType().equals(Boolean.class)) {
-            		field.set(clone, field.get(obj));
-            	} else {
-            		Object childObj=field.get(obj);
-            		if(childObj==obj) {
-            			field.set(clone, clone);
-            		} else {
-            			field.set(clone,cloneObject(field.get(obj)));
-            		}
-            	}
-            }
-            return clone;
-        } catch(Exception e) {
-        	return null;
-        }
+			Object clone=obj.getClass().newInstance();
+			for (Field field:obj.getClass().getDeclaredFields()) {
+				field.setAccessible(true);
+				if(field.get(obj)==null||Modifier.isFinal(field.getModifiers())) continue;
+				if(field.getType().isPrimitive()
+						||field.getType().equals(String.class)
+						||field.getType().getSuperclass().equals(Number.class)
+						||field.getType().equals(Boolean.class)) {
+					field.set(clone, field.get(obj));
+				} else {
+					Object childObj=field.get(obj);
+					if(childObj==obj) {
+						field.set(clone, clone);
+					} else {
+						field.set(clone,cloneObject(field.get(obj)));
+					}
+				}
+			}
+			return clone;
+		} catch(Exception e) {
+			return null;
+		}
+	}
+
+	public static boolean parseNBToutcome(String s1,String s2,int i1) {
+		if (0<i1&&i1<7) {
+			if (Character.isLetter(s1.charAt(s1.length()-1))) s1=s1.substring(0,s1.length()-1);
+			if (Character.isLetter(s2.charAt(s2.length()-1))) s2=s2.substring(0,s2.length()-1);
+			double d1=Double.parseDouble(s1.toString()),d2=Double.parseDouble(s2.toString());
+			return d1==d2;
+		} else if (i1==8) {
+			if (s1.toLowerCase().substring(0,4).equals("\"rd:")) {
+				s1=s1.substring(1,s1.length()-1);
+				if (s2.startsWith("\"")&&s2.endsWith("\"")) s2=s2.substring(1,s2.length()-1);
+				RangedDouble rd=new RangedDouble(s1.substring(3));
+				if (Character.isLetter(s2.charAt(s2.length()-1))) s2=s2.substring(0,s2.length()-1);
+				double d1;
+				try {
+					d1=Double.parseDouble(s2);
+				} catch (Exception e) {
+					return false;
+				}
+				return rd.equals(d1);
+			}
+			return s1.equals(s2);
+		}
+		return false;
 	}
 
 	public static boolean cmpLocByBlock(Location l1, Location l2) {
 		return l1.getBlockX()==l2.getBlockX()&&l1.getBlockY()==l2.getBlockY()&&l1.getBlockZ()==l2.getBlockZ();
-	}	
-	
+	}
+
+	public static boolean playerInMotion(Player p) {
+		Vec3D v3=Utils.pl.get(p.getUniqueId());
+		return Math.abs(v3.getX())>0.02||Math.abs(v3.getY())>0.02||Math.abs(v3.getZ())>=0.02;
+	}
+
 }

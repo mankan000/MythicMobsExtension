@@ -1,7 +1,10 @@
 package com.gmail.berndivader.utils;
 
-public class Vec2D {
-	private double x,y;
+public class Vec2D
+implements
+Cloneable {
+	private double x;
+	private double y;
 	
 	public Vec2D(double x,double y) {
 		this.x=x;
@@ -22,5 +25,8 @@ public class Vec2D {
 	public void set(double x,double y) {
 		this.x=x;
 		this.y=y;
+	}
+	public Vec2D clone() throws CloneNotSupportedException {
+		return (Vec2D)super.clone();
 	}
 }

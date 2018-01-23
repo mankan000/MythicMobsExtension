@@ -58,8 +58,10 @@ ITargetedLocationSkill {
 	
 	private void changePathBlocksToDiamond(Location start, List<Tile> tiles){
 		List<Player>players=start.getWorld().getPlayers();
-		for (Tile t : tiles) {
-			for (Player p : players) {
+		Iterator<Tile>it1=tiles.iterator();
+		while(it1.hasNext()) {
+			Tile t=it1.next();
+			for (Player p:players) {
 				// sendBlockChange is depricated Bukkit API
 				p.sendBlockChange(new Location(p.getWorld(), (start.getBlockX() + t.getX()), (start.getBlockY() + t.getY()), (start.getBlockZ() + t.getZ())),
 						Material.DIAMOND_BLOCK, (byte) 0);

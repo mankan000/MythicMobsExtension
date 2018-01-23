@@ -3,7 +3,7 @@ package com.gmail.berndivader.mythicmobsext.mechanics;
 import com.gmail.berndivader.mythicmobsext.Main;
 import org.bukkit.entity.LivingEntity;
 
-import com.gmail.berndivader.volatilecode.VolatileHandler;
+import com.gmail.berndivader.volatilecode.Handler;
 
 import io.lumine.xikage.mythicmobs.adapters.AbstractEntity;
 import io.lumine.xikage.mythicmobs.io.MythicLineConfig;
@@ -16,8 +16,8 @@ public class AdvAIPathFinderMechanic extends SkillMechanic
 implements
 ITargetedEntitySkill {
 	
-	private VolatileHandler vh = Main.getPlugin().getVolatileHandler();
-	private String g;
+	Handler vh = Main.getPlugin().getVolatileHandler();
+	String g;
 	
 	public AdvAIPathFinderMechanic(String skill, MythicLineConfig mlc) {
 		super(skill, mlc);
