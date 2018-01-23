@@ -117,7 +117,7 @@ public class Main extends JavaPlugin {
 			new Utils(this);
 			new CustomMechanics(this);
 			logger.info("registered CustomMechanics!");
-			new CustomConditions(); //this?
+			new CustomConditions(this);
 			logger.info("registered CustomConditions!");
 
 			if (Config.nan) {
