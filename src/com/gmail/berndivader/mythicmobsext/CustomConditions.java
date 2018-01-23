@@ -2,247 +2,223 @@ package com.gmail.berndivader.mythicmobsext;
 
 import com.gmail.berndivader.mythicmobsext.conditions.*;
 
-import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.plugin.Plugin;
 
 import io.lumine.xikage.mythicmobs.api.bukkit.events.MythicConditionLoadEvent;
 import io.lumine.xikage.mythicmobs.skills.SkillCondition;
 
 public class CustomConditions implements Listener {
 
-	public CustomConditions() {
-		Bukkit.getServer().getPluginManager().registerEvents(this, Main.getPlugin());
+	public CustomConditions(Plugin plugin) {
+		plugin.getServer().getPluginManager().registerEvents(this, plugin);
 	}
 
 	@EventHandler
 	public void onMythicMobsConditionsLoadEvent(MythicConditionLoadEvent e) {
-		String conditionName = e.getConditionName().toLowerCase();
-		switch (conditionName) {
+		String condition;
+		SkillCondition cond;
+		condition = e.getConditionName().toLowerCase();
+
+		switch (condition) {
 			case "arrowcount": {
-				SkillCondition c = new ArrowOnEntityCondition(e.getConfig().getLine(), e.getConfig());
-				e.register(c);
+				cond = new ArrowOnEntityCondition(e.getConfig().getLine(),e.getConfig());
+				e.register(cond);
 				break;
-			}
-			case "behind": {
-				SkillCondition c = new IsBehindCondition(e.getConfig().getLine(), e.getConfig());
-				e.register(c);
+			} case "behind": {
+				cond = new IsBehindCondition(e.getConfig().getLine(),e.getConfig());
+				e.register(cond);
 				break;
-			}
-			case "biomefix": {
-				SkillCondition c = new BiomeFixCondition(e.getConfig().getLine(), e.getConfig());
-				e.register(c);
+			} case "biomefix": {
+				cond = new BiomeFixCondition(e.getConfig().getLine(),e.getConfig());
+				e.register(cond);
 				break;
-			}
-			case "cmpnbt": {
-				SkillCondition c = new CompareNBTCondition(e.getConfig().getLine(), e.getConfig());
-				e.register(c);
+			} case "cmpnbt": {
+				cond = new CompareNBTCondition(e.getConfig().getLine(),e.getConfig());
+				e.register(cond);
 				break;
-			}
-			case "crouching":
+			} case "crouching":
 			case "running":
 			case "disguised":
 			case "sleeping":
 			case "jumping": {
-				SkillCondition c = new PlayerBooleanConditions(e.getConfig().getLine(), e.getConfig());
-				e.register(c);
+				cond = new PlayerBooleanConditions(e.getConfig().getLine(),e.getConfig());
+				e.register(cond);
 				break;
-			}
-			case "damageable":
+			} case "damageable":
 			case "attackable": {
-				SkillCondition c = new IsAttackableCondition(e.getConfig().getLine(), e.getConfig());
-				e.register(c);
+				cond = new IsAttackableCondition(e.getConfig().getLine(),e.getConfig());
+				e.register(cond);
 				break;
-			}
-			case "entitiesinradius":
+			} case "entitiesinradius":
 			case "eir":
 			case "leir":
 			case "livingentitiesinradius":
 			case "pir":
 			case "playersinradius": {
-				SkillCondition c = new EntitiesInRadiusCondition(e.getConfig().getLine(), e.getConfig());
-				e.register(c);
+				cond = new EntitiesInRadiusCondition(e.getConfig().getLine(),e.getConfig());
+				e.register(cond);
 				break;
-			}
-			case "facingdirection": {
-				SkillCondition c = new FacingDirectionCondition(e.getConfig().getLine(), e.getConfig());
-				e.register(c);
+			} case "facingdirection": {
+				cond = new FacingDirectionCondition(e.getConfig().getLine(),e.getConfig());
+				e.register(cond);
 				break;
-			}
-			case "getbowtension":
+			} case "getbowtension":
 			case "bowtension":
 			case "lastbowtension":
 			case "tension": {
-				SkillCondition c = new GetBowtensionCondition(e.getConfig().getLine(), e.getConfig());
-				e.register(c);
+				cond = new GetBowtensionCondition(e.getConfig().getLine(),e.getConfig());
+				e.register(cond);
 				break;
-			}
-			case "getindicator":
+			} case "getindicator":
 			case "damageindicator":
 			case "indicator": {
-				SkillCondition c = new GetDamageIndicator(e.getConfig().getLine(), e.getConfig());
-				e.register(c);
+				cond = new GetDamageIndicator(e.getConfig().getLine(),e.getConfig());
+				e.register(cond);
 				break;
-			}
-			case "lastindicator":
+			} case "lastindicator":
 			case "lastdamageindicator":
 			case "getlastindicator":
 			case "getlastdamageindicator": {
-				SkillCondition c = new GetLastDamageIndicator(e.getConfig().getLine(), e.getConfig());
-				e.register(c);
+				cond = new GetLastDamageIndicator(e.getConfig().getLine(),e.getConfig());
+				e.register(cond);
 				break;
-			}
-			case "hasmeta":
+			} case "hasmeta":
 			case "hasmetasimple": {
-				SkillCondition c = new HasMetaTagCondition(e.getConfig().getLine(), e.getConfig());
-				e.register(c);
+				cond = new HasMetaTagCondition(e.getConfig().getLine(),e.getConfig());
+				e.register(cond);
 				break;
-			}
-			case "hasspawner": {
-				SkillCondition c = new HasMythicSpawnerCondition(e.getConfig().getLine(), e.getConfig());
-				e.register(c);
+			} case "hasspawner": {
+				cond = new HasMythicSpawnerCondition(e.getConfig().getLine(),e.getConfig());
+				e.register(cond);
 				break;
-			}
-			case "hastarget": {
-				SkillCondition c = new HasTargetCondition(e.getConfig().getLine(), e.getConfig());
-				e.register(c);
+			} case "hastarget": {
+				cond = new HasTargetCondition(e.getConfig().getLine(),e.getConfig());
+				e.register(cond);
 				break;
-			}
-			case "health": {
-				SkillCondition c = new Healthcondition(e.getConfig().getLine(), e.getConfig());
-				e.register(c);
+			} case "health": {
+				cond = new Healthcondition(e.getConfig().getLine(),e.getConfig());
+				e.register(cond);
 				break;
-			}
-			case "infaction": {
-				SkillCondition c = new InFactionCondition(e.getConfig().getLine(), e.getConfig());
-				e.register(c);
+			} case "infaction": {
+				cond = new InFactionCondition(e.getConfig().getLine(),e.getConfig());
+				e.register(cond);
 				break;
-			}
-			case "infront": {
-				SkillCondition c = new InFrontCondition(e.getConfig().getLine(), e.getConfig());
-				e.register(c);
+			} case "infront": {
+				cond = new InFrontCondition(e.getConfig().getLine(),e.getConfig());
+				e.register(cond);
 				break;
-			}
-			case "inmotion": {
-				SkillCondition c = new InMotionCondition(e.getConfig().getLine(), e.getConfig());
-				e.register(c);
+			} case "inmotion": {
+				cond = new InMotionCondition(e.getConfig().getLine(),e.getConfig());
+				e.register(cond);
 				break;
-			}
-			case "isburning": {
-				SkillCondition c = new IsBurningCondition(e.getConfig().getLine(), e.getConfig());
-				e.register(c);
+			} case "isburning": {
+				cond = new IsBurningCondition(e.getConfig().getLine(),e.getConfig());
+				e.register(cond);
 				break;
-			}
-			case "isgoggling": {
-				SkillCondition c = new IsGogglingCondition(e.getConfig().getLine(), e.getConfig());
-				e.register(c);
+			} case "isgoggling": {
+				cond = new IsGogglingCondition(e.getConfig().getLine(),e.getConfig());
+				e.register(cond);
 				break;
-			}
-			case "ispresent": {
-				SkillCondition c = new IsTargetPresentCondition(e.getConfig().getLine(), e.getConfig());
-				e.register(c);
+			} case "ispresent": {
+				cond = new IsTargetPresentCondition(e.getConfig().getLine(),e.getConfig());
+				e.register(cond);
 				break;
-			}
-			case "isspinning": {
-				SkillCondition c = new IsSpinningCondition(e.getConfig().getLine(), e.getConfig());
-				e.register(c);
+			} case "isspinning": {
+				cond = new IsSpinningCondition(e.getConfig().getLine(),e.getConfig());
+				e.register(cond);
 				break;
-			}
-			case "isstunned":
+			} case "isstunned":
 			case "stunned": {
-				SkillCondition c = new IsStunnedCondition(e.getConfig().getLine(), e.getConfig());
-				e.register(c);
+				cond = new IsStunnedCondition(e.getConfig().getLine(),e.getConfig());
+				e.register(cond);
 				break;
-			}
-			case "isvehicle": {
-				SkillCondition c = new IsVehicleCondition(e.getConfig().getLine(), e.getConfig());
-				e.register(c);
+			} case "isvehicle": {
+				cond = new IsVehicleCondition(e.getConfig().getLine(),e.getConfig());
+				e.register(cond);
 				break;
-			}
-			case "hasvehicle": {
-				SkillCondition c = new HasVehicleCondition(e.getConfig().getLine(), e.getConfig());
-				e.register(c);
+			} case "hasvehicle": {
+				cond = new HasVehicleCondition(e.getConfig().getLine(),e.getConfig());
+				e.register(cond);
 				break;
-			}
-			case "lastdamagecause": {
-				SkillCondition c = new LastDamageCauseCondition(e.getConfig().getLine(), e.getConfig());
-				e.register(c);
+			} case "lastdamagecause": {
+				cond = new LastDamageCauseCondition(e.getConfig().getLine(),e.getConfig());
+				e.register(cond);
 				break;
-			}
-			case "lookatme":
+			} case "lookatme":
 			case "looksatme": {
-				SkillCondition c = new LookingAtMeCondition(e.getConfig().getLine(), e.getConfig());
-				e.register(c);
+				cond = new LookingAtMeCondition(e.getConfig().getLine(),e.getConfig());
+				e.register(cond);
 				break;
-			}
-			case "mir":
+			} case "mir":
 			case "mobsinradius": {
-				SkillCondition c = new MobsInRadiusCondition(e.getConfig().getLine(), e.getConfig());
-				e.register(c);
+				cond = new MobsInRadiusCondition(e.getConfig().getLine(),e.getConfig());
+				e.register(cond);
 				break;
 			} case "moveto": {
-				SkillCondition c=new MoveToCondition(e.getConfig().getLine(),e.getConfig());
-				e.register(c);
+				cond = new MoveToCondition(e.getConfig().getLine(),e.getConfig());
+				e.register(cond);
 				break;
 			} case "movespeed": {
-				SkillCondition c=new MovementSpeedCondition(e.getConfig().getLine(),e.getConfig());
-				e.register(c);
+				cond = new MovementSpeedCondition(e.getConfig().getLine(),e.getConfig());
+				e.register(cond);
 				break;
 			} case "oncooldown": {
-				SkillCondition c=new OnCooldownCondition(e.getConfig().getLine(),e.getConfig());
-				e.register(c);
+				cond = new OnCooldownCondition(e.getConfig().getLine(),e.getConfig());
+				e.register(cond);
 				break;
 			} case "onsolidblock":
 			case "insolidblock": {
-				SkillCondition c=new SolidBlockConditions(e.getConfig().getLine(),e.getConfig());
-				e.register(c);
+				cond = new SolidBlockConditions(e.getConfig().getLine(),e.getConfig());
+				e.register(cond);
 				break;
 			} case "owneralive": {
-				SkillCondition c=new OwnerAliveCondition(e.getConfig().getLine(),e.getConfig());
-				e.register(c);
+				cond = new OwnerAliveCondition(e.getConfig().getLine(),e.getConfig());
+				e.register(cond);
 				break;
 			} case "ownsitem":
 			case "ownsitemsimple":
 			case "iteminhand": {
-				SkillCondition c = new HasItemCondition(e.getConfig().getLine(), e.getConfig());
-				e.register(c);
+				cond = new HasItemCondition(e.getConfig().getLine(),e.getConfig());
+				e.register(cond);
 				break;
 			} case "parsedstance":
 			case "pstance": {
-				SkillCondition c = new ParsedStanceCondition(e.getConfig().getLine(),e.getConfig());
-				e.register(c);
+				cond = new ParsedStanceCondition(e.getConfig().getLine(),e.getConfig());
+				e.register(cond);
 				break;
 			} case "playertime": {
-				SkillCondition c=new PlayerTimeCondition(e.getConfig().getLine(),e.getConfig());
-				e.register(c);
+				cond = new PlayerTimeCondition(e.getConfig().getLine(),e.getConfig());
+				e.register(cond);
 				break;
 			} case "playerweather": {
-				SkillCondition c=new PlayerWeatherCondition(e.getConfig().getLine(),e.getConfig());
-				e.register(c);
+				cond = new PlayerWeatherCondition(e.getConfig().getLine(),e.getConfig());
+				e.register(cond);
 				break;
 			} case "relativedirection": {
-				SkillCondition c = new DirectionalDamageCondition(e.getConfig().getLine(),e.getConfig());
-				e.register(c);
+				cond = new DirectionalDamageCondition(e.getConfig().getLine(),e.getConfig());
+				e.register(cond);
 				break;
 			} case "samefaction": {
-				SkillCondition c = new SameFactionCondition(e.getConfig().getLine(),e.getConfig());
-				e.register(c);
+				cond = new SameFactionCondition(e.getConfig().getLine(),e.getConfig());
+				e.register(cond);
 				break;
 			} case "samespawner": {
-				SkillCondition c=new SameMythicSpawnerCondition(e.getConfig().getLine(),e.getConfig());
-				e.register(c);
+				cond = new SameMythicSpawnerCondition(e.getConfig().getLine(),e.getConfig());
+				e.register(cond);
 				break;
 			} case "sameworld": {
-				SkillCondition c=new SameWorldCondition(e.getConfig().getLine(),e.getConfig());
-				e.register(c);
+				cond = new SameWorldCondition(e.getConfig().getLine(),e.getConfig());
+				e.register(cond);
 				break;
 			} case "testfor": {
-				SkillCondition c=new TestForCondition(e.getConfig().getLine(),e.getConfig());
-				e.register(c);
+				cond = new TestForCondition(e.getConfig().getLine(),e.getConfig());
+				e.register(cond);
 				break;
 			} case "vdistance": {
-				SkillCondition c = new VerticalDistanceCondition(e.getConfig().getLine(), e.getConfig());
-				e.register(c);
+				cond = new VerticalDistanceCondition(e.getConfig().getLine(),e.getConfig());
+				e.register(cond);
 				break;
 			}
 		}
