@@ -959,12 +959,16 @@ public class Core
 	@Override
 	public void moveto(LivingEntity entity) {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void setWBWB(Player p, boolean bl1) {
 		// TODO Auto-generated method stub
+	}
 
+	@Override
+	public boolean addNBTTag(Entity e1, String s) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }

@@ -39,5 +39,4 @@ IEntityCondition {
         }
         return false;
     }
-
 }

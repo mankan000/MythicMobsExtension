@@ -255,6 +255,10 @@ public class CustomMechanics implements Listener {
 				skill = new SetMobHealthMechanic(e.getContainer().getConfigLine(),e.getConfig());
 				e.register(skill);
 				break;
+			} case "setnbt": {
+				skill=new SetNbt(e.getContainer().getConfigLine(),e.getConfig());
+				e.register(skill);
+				break;
 			} case "setrotation": {
 				skill = new SetRotationMechanic(e.getContainer().getConfigLine(),e.getConfig());
 				e.register(skill);

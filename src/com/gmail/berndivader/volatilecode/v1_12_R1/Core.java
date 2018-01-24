@@ -59,7 +59,7 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class Core
-		implements Handler,Listener {
+implements Handler,Listener {
 
 	private static String signal_AISHOOT="AISHOOT";
 	private static String signal_AIHIT="AIHIT";
@@ -1115,6 +1115,31 @@ public class Core
 		return getNBTValue(e1,s1);
 	}
 
+	@Override
+	public boolean addNBTTag(Entity e1,String s) {
+		net.minecraft.server.v1_12_R1.Entity me=((CraftEntity)e1).getHandle();
+		NBTTagCompound nbt1=null,nbt2=null,nbt3=null;
+		if ((nbt1=TFa(me))!=null) {
+			nbt3=nbt1.g();
+			try {
+				nbt2=MojangsonParser.parse(s);
+			}
+			catch (MojangsonParseException ex) {
+				System.err.println(ex.getLocalizedMessage());
+				return false;
+			}
+			UUID u=me.getUniqueID();
+			nbt1.a(nbt2);
+			me.a(u);
+			if(nbt3.equals(nbt1)) {
+				return false;
+			}
+			me.f(nbt1);
+			return true;
+		}
+		return false;
+	}
+
 	private boolean getNBTValue(Entity e1, String s) {
 		net.minecraft.server.v1_12_R1.Entity me=((CraftEntity)e1).getHandle();
 		NBTTagCompound nbt1=null,nbt2=null;
@@ -1305,5 +1330,4 @@ public class Core
 		PacketPlayOutWorldBorder ppw=new PacketPlayOutWorldBorder(wb,EnumWorldBorderAction.INITIALIZE);
 		ep.playerConnection.sendPacket(ppw);
 	}
-
 }
