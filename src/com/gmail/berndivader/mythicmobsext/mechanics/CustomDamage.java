@@ -25,7 +25,8 @@ ITargetedEntitySkill {
 	boolean uc;
 	boolean pcur;
 	boolean debug;
-	double dbd;
+	double rdbd;
+	double idbd;
 	DamageCause cause;
 	String amount;
 	String ca;
@@ -45,7 +46,8 @@ ITargetedEntitySkill {
 		this.uc = mlc.getBoolean(new String[] { "usecaster", "uc" }, false);
 		this.pcur = mlc.getBoolean(new String[] { "percentcurrent", "pcur", "pc" }, false);
 		ca = mlc.getString(new String[] { "damagecause", "cause", "dc" }, "CUSTOM").toUpperCase();
-		this.dbd = mlc.getDouble(new String[] { "reducedamagebydistance", "rdbd" }, -7331D);
+		this.rdbd = mlc.getDouble(new String[] { "reducedamagebydistance", "rdbd" }, -7331D);
+		this.idbd = mlc.getDouble(new String[] { "increasedamagebydistance", "idbd" }, -7331D);
 		cause=DamageCause.CUSTOM;
 		for (DamageCause dc : DamageCause.values()) {
 			if (dc.toString().equals(ca)) {
@@ -71,9 +73,16 @@ ITargetedEntitySkill {
 		}
 		if (!this.ip)
 			dmg = dmg * data.getPower();
-		if (this.dbd>-7331D) {
-			int dd=(int)Math.sqrt(Utils.distance3D(data.getCaster().getEntity().getLocation().toVector(), t.getBukkitEntity().getLocation().toVector()));
-			dmg-=(dmg*(dd*dbd));
+		if (this.rdbd>-7331D && this.idbd>-7331D) {
+			this.idbd = -7331D;
+		}
+		if (this.rdbd>-7331D) {
+			int dd=(int)Math.sqrt(Utils.distance3D(data.getCaster().getEntity().getBukkitEntity().getLocation().toVector(), t.getBukkitEntity().getLocation().toVector()));
+			dmg-=(dmg*(dd*rdbd));
+		}
+		if (this.idbd>-7331D) {
+			int dd=(int)Math.sqrt(Utils.distance3D(data.getCaster().getEntity().getBukkitEntity().getLocation().toVector(), t.getBukkitEntity().getLocation().toVector()));
+			dmg+=(dmg*(dd*idbd));
 		}
 		Utils.doDamage(data.getCaster(), t, dmg, this.ia, this.pk, this.pi, this.iabs, this.debug, this.cause);
 		return true;

@@ -627,7 +627,7 @@ public class Utils implements Listener {
 		return dx * dx + dz * dz;
 	}
 
-	public static double distance3D(AbstractVector f, Vector t) {
+	public static double distance3D(Vector f, Vector t) {
 		double dx = t.getBlockX() - f.getBlockX();
 		double dy = t.getBlockY() - f.getBlockY();
 		double dz = t.getBlockZ() - f.getBlockZ();
