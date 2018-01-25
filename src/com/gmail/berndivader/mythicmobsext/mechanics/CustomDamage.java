@@ -60,11 +60,11 @@ ITargetedEntitySkill {
 	public boolean castAtEntity(SkillMetadata data, AbstractEntity t) {
 		if (t.isDead() || t.getHealth() <= 0.0 || data.getCaster().isUsingDamageSkill())
 			return false;
-		SkillCaster c = data.getCaster();
+		AbstractEntity c = data.getCaster().getEntity();
 		double dmg = Utils.randomRangeDouble(this.amount);
 		if (this.p) {
 			if (this.uc) {
-				dmg = this.pcur ? c.getEntity().getHealth() * dmg : c.getEntity().getMaxHealth() * dmg;
+				dmg = this.pcur ? c.getHealth() * dmg : c.getMaxHealth() * dmg;
 			} else {
 				dmg = this.pcur ? t.getHealth() * dmg : t.getMaxHealth() * dmg;
 			}
