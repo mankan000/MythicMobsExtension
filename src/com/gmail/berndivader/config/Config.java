@@ -28,6 +28,9 @@ public class Config {
 		File configFile = new File(plugin.getDataFolder(), "config.yml");
 		if (!configFile.exists()) {
 			plugin.getLogger().info("Generating config.yml...");
+			if (!plugin.getDataFolder().exists()) {
+				plugin.getDataFolder().mkdirs();
+			}
 			plugin.saveDefaultConfig();
 		}
 

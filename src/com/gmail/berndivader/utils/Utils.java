@@ -12,6 +12,7 @@ import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
+import io.lumine.xikage.mythicmobs.adapters.AbstractVector;
 import io.lumine.xikage.mythicmobs.util.types.RangedDouble;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -547,7 +548,7 @@ public class Utils implements Listener {
 
 	public static Vector calculateTrajectory(Vector from, Vector to, double heightGain, double gravity) {
 		int endGain = to.getBlockY() - from.getBlockY();
-		double horizDist = Math.sqrt(distanceSquared(from, to));
+		double horizDist = Math.sqrt(distance2D(from, to));
 		double maxGain = heightGain > (endGain + heightGain) ? heightGain : (endGain + heightGain);
 		double a = -horizDist * horizDist / (4 * maxGain);
 		double b = horizDist;
@@ -620,10 +621,17 @@ public class Utils implements Listener {
 		return (a + Math.sqrt(Math.pow(a, 2) + b)) / g;
 	}
 
-	public static double distanceSquared(Vector f, Vector t) {
+	public static double distance2D(Vector f, Vector t) {
 		double dx = t.getBlockX() - f.getBlockX();
 		double dz = t.getBlockZ() - f.getBlockZ();
 		return dx * dx + dz * dz;
+	}
+
+	public static double distance3D(AbstractVector f, Vector t) {
+		double dx = t.getBlockX() - f.getBlockX();
+		double dy = t.getBlockY() - f.getBlockY();
+		double dz = t.getBlockZ() - f.getBlockZ();
+		return dx*dx+dy*dy+dz*dz;
 	}
 
 	public static boolean isNumeric(String s) {
