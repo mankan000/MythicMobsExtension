@@ -71,7 +71,7 @@ ITargetedEntitySkill {
 		}
 		if (!this.ip)
 			dmg = dmg * data.getPower();
-		if (dbd>-7331D) {
+		if (this.dbd>-7331D) {
 			int dd=(int)Math.sqrt(Utils.distance3D(data.getCaster().getEntity().getLocation().toVector(), t.getBukkitEntity().getLocation().toVector()));
 			dmg-=(dmg*(dd*dbd));
 		}
