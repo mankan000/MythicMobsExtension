@@ -11,7 +11,7 @@ import io.lumine.xikage.mythicmobs.skills.ITargetedEntitySkill;
 import io.lumine.xikage.mythicmobs.skills.SkillMechanic;
 import io.lumine.xikage.mythicmobs.skills.SkillMetadata;
 
-public class SetLevelMechanic 
+public class SetMobLevelMechanic
 extends 
 SkillMechanic 
 implements 
@@ -21,7 +21,7 @@ ITargetedEntitySkill {
 	int min;
 	int max;
 
-	public SetLevelMechanic(String skill, MythicLineConfig mlc) {
+	public SetMobLevelMechanic(String skill, MythicLineConfig mlc) {
 		super(skill, mlc);
 		this.ASYNC_SAFE=false;
 		this.mobmanager= Main.getPlugin().getMobManager();

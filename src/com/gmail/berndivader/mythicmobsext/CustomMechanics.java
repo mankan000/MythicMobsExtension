@@ -242,9 +242,9 @@ public class CustomMechanics implements Listener {
 				skill = new SetItemCooldown(e.getContainer().getConfigLine(),e.getConfig());
 				e.register(skill);
 				break;
-			} case "setlevel":
+			} case "setmoblevel":
 			case "setrandomlevel": {
-				skill = new SetLevelMechanic(e.getContainer().getConfigLine(),e.getConfig());
+				skill = new SetMobLevelMechanic(e.getContainer().getConfigLine(),e.getConfig());
 				e.register(skill);
 				break;
 			} case "setmeta": {
